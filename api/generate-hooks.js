@@ -16,54 +16,47 @@ export default async function handler(req) {
 
   const body = await req.json().catch(() => ({}));
   const {
-    platform = "tiktok", niche = "", theme = "", tone = "intrigant", audience = "",
-    brief = "", intensity = "normal", priorityCategories = [], count = 10
+    platform = "tiktok", niche = "", theme = "", tone = "intrigant",
+    brief = "", priorityCategories = [], count = 10,
+    // --- AJOUT: Récupération du mode Putaclic ---
+    putaclic = false
   } = body;
 
   const safeCount = Math.min(Math.max(parseInt(count || 10, 10), 1), 25);
   const catsAll = ["question","negatif","controverse","promesse","chiffres","experience","surprenant","suspense","fomo"];
   const picked = Array.isArray(priorityCategories) ? priorityCategories.filter(c => catsAll.includes(c)) : [];
 
-  const emotionGuide = {
-    leger: "Emotion légère, bienveillante. Curiosité douce, humour léger.",
-    normal: "Emotion nette, pattern‑interrupt assumé. Curiosité/FOMO/urgence équilibrées.",
-    agressif: "Emotion forte: FOMO, urgence, controverse. Formulations tranchées mais non offensantes."
-  }[String(intensity).toLowerCase()] || "Emotion nette, pattern‑interrupt assumé.";
-
   const platformGuide = {
-    tiktok: "Style très cut et émotionnel. Accroche immédiate <2s. Phrases courtes (<=10-12 mots). FOMO/contraste assumés. Lexique direct.",
-    reels: "Style share/save-friendly. Promesse claire, bénéfice concret, ton plus clean. Toujours court mais moins haché que TikTok.",
-    shorts: "Accroche explicite du sujet + curiosité. Bon pour chiffré/how-to/teaser. Clarté early. Hook court requis."
+    tiktok: "Style très cut et émotionnel. Accroche immédiate <2s. Phrases courtes (<=10-12 mots).",
+    reels: "Style partageable (share/save). Promesse claire, bénéfice concret, ton plus clean.",
+    shorts: "Accroche explicite du sujet + curiosité. Bon pour chiffré/how-to. Clarté early."
   }[String(platform).toLowerCase()] || "Style court et clair.";
 
   const mustInclude = picked.length
     ? `Priorise et inclue des hooks appartenant aux catégories: ${picked.join(", ")}.`
     : "Varie librement les catégories en équilibrant l'ensemble.";
+    
+  // --- AJOUT: Instructions spécifiques pour le mode Putaclic ---
+  const putaclicGuide = putaclic
+    ? `\nMODE PUTACLIC ACTIVÉ: L'objectif est le clic à tout prix. Sois excessif, provocateur et utilise des superlatifs extrêmes (choquant, incroyable, interdit, jamais vu). Crée un sentiment d'urgence ou de scandale. Les titres doivent être irrésistibles, quitte à être à la limite de l'éthique. Exagération maximale.`
+    : "";
 
   const system = `Tu es expert des hooks short‑form.
-Objectif: produire des hooks à FORTE CHARGE EMOTIONNELLE (≤2s d'impact).
+Objectif: produire des hooks à FORTE CHARGE ÉMOTIONNELLE (impact en ≤2s).
 Sortie STRICTE: JSON { "hooks": string[] } uniquement.
 Langue: français. Longueur: ≤ 12 mots. Interdits: guillemets, hashtags, emojis, point final.
-Catégories autorisées: question, negatif, controverse, promesse, chiffres, experience, surprenant, suspense, fomo.
 Plateforme ciblée: ${platform} → ${platformGuide}
-Consigne émotion: ${emotionGuide}
-Rappels: clarté > style, un concept fort par hook, spécifique à la niche et au thème, pattern‑interrupt au début.`;
+${putaclicGuide}`; // Injection des instructions putaclic ici
 
   const user = `Contexte:
 Niche: ${niche}
 Thème: ${theme}
 Ton: ${tone}
-Audience (optionnel): ${audience || "—"}
 Brief libre (optionnel): ${brief || "—"}
 
-Catégories prioritaires (optionnel): ${picked.length ? picked.join(", ") : "—"}
 ${mustInclude}
 
-Contraintes supplémentaires:
-- Génère ${safeCount} hooks variés.
-- Inclure au moins: 1 hook FOMO, 1 hook contrarien/controversé, 1 hook chiffré.
-- Adapte la formulation au ton, à l’intensité et à la plateforme.
-`;
+Génère ${safeCount} hooks variés.`;
 
   try {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
