@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Générateur de Hooks</title>
+  <style>
+    :root{ --cream:#F7F3EE; --card:#FFFFFF; --ink:#1F2937; --muted:#6B7280;
+      --blue:#61A8FF; --blue-strong:#3E8FFF; --blue-soft:#E8F2FF;
+      --border:#E5E7EB; --shadow:0 10px 30px rgba(0,0,0,.08); --radius:18px; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
+    header{max-width:980px;margin:24px auto 12px;padding:0 16px}
+    h1{margin:0 0 6px;font-size:clamp(22px,2.6vw,34px)}
+    .sub{color:var(--muted)}
+    .wrap{max-width:980px;margin:0 auto 40px;padding:0 16px;display:grid;gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .inner{padding:18px}
+    .grid{display:grid;gap:12px}
+    @media(min-width:720px){.grid.cols-2{grid-template-columns:1fr 1fr} .grid.cols-3{grid-template-columns:1fr 1fr 1fr}}
+    label{font-weight:600;display:block;margin-bottom:6px}
+    input[type="text"],select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#FAFAFA}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{border:0;padding:12px 14px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow);transition:background .2s, transform .04s}
+    .btn:hover{background:var(--blue-strong)} .btn:active{transform:translateY(1px)}
+    .btn.secondary{background:#fff;color:#111;border:1px solid var(--border)}
+    .list{display:grid;gap:10px}
+    .hook{padding:10px 12px;border:1px dashed var(--border);border-radius:12px;background:#FCFCFD;display:flex;gap:10px;align-items:start}
+    .hook span{flex:1}
+    .hook .copy{white-space:nowrap}
+    .tip{margin-top:6px;padding:10px 12px;border-left:4px solid var(--blue);background:#F8FAFF;border-radius:10px}
+    .small{font-size:12.5px}
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#111;color:#fff;padding:10px 14px;border-radius:999px;display:none}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Générateur de hooks</h1>
+    <div class="sub">Deux modes : <b>Offline</b> (gratuit) et <b>Boost AI</b> (via API serverless). Tout tourne sur ce site.</div>
+  </header>
+
+  <section class="wrap">
+    <div class="card">
+      <div class="inner">
+        <div class="grid cols-3">
+          <div>
+            <label for="niche">Niche / sujet</label>
+            <input id="niche" type="text" placeholder="ex : formation en ligne / montage vidéo / fitness"/>
+          </div>
+          <div>
+            <label for="audience">Audience cible</label>
+            <input id="audience" type="text" placeholder="ex : débutants, freelances, mamans pressées"/>
+          </div>
+          <div>
+            <label for="benefit">Résultat promis</label>
+            <input id="benefit" type="text" placeholder="ex : gagner 1h/jour, x2 vues, mieux vendre"/>
+          </div>
+        </div>
+        <div class="grid cols-3" style="margin-top:8px">
+          <div>
+            <label for="tone">Ton</label>
+            <select id="tone">
+              <option value="intrigant">Intrigant</option>
+              <option value="bienveillant">Bienveillant</option>
+              <option value="cash">Cash</option>
+              <option value="humour">Humour</option>
+              <option value="urgent">Urgent</option>
+              <option value="educatif">Éducatif</option>
+            </select>
+          </div>
+          <div>
+            <label for="count">Nombre de hooks</label>
+            <select id="count">
+              <option>5</option>
+              <option selected>10</option>
+              <option>15</option>
+            </select>
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <div class="row">
+              <button id="offline" class="btn secondary">Offline</button>
+              <button id="boost" class="btn">Boost AI</button>
+            </div>
+          </div>
+        </div>
+        <p class="tip small">Astuce : cible précise + bénéfice chiffré = hook plus fort. Tu peux rester en mode Offline ou cliquer « Boost AI » si l’API est branchée.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="inner">
+        <h3 style="margin:0 0 6px">Hooks</h3>
+        <div id="list" class="list"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const rand = (arr) => arr[Math.floor(Math.random()*arr.length)];
+    const capIntro = (txt) => { const p=txt.split(' '); const n=Math.min(4,Math.max(2,Math.ceil(p.length*0.25))); return p.map((w,i)=>i<n?w.toUpperCase():w).join(' '); };
+    const maybeEmoji = (txt) => { const pack=['🔥','⚠️','✅','💡','🚀','👀','🎯']; return Math.random()<0.4 ? (pack[Math.floor(Math.random()*pack.length)]+' '+txt) : txt; };
+    const limitWords = (txt, limit=12) => { const w=txt.split(/\s+/); return w.length>limit? w.slice(0,limit).join(' ')+'…' : txt; };
+    const uniq = (arr) => [...new Set(arr.map(s=>s.trim()))];
+    function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1500); }
+
+    const TEMPLATES = [
+      "STOP {audience} : {promesse} en {delai}?",
+      "{question} {audience}, {promesse} sans {obstacle}",
+      "{nombre} erreurs qui tuent vos {objectif} (la #3 partout)",
+      "{audience}, personne ne vous dit ça : {revelation}",
+      "Vous faites {mauvaise_pratique}? Voilà {solution_courte}",
+      "{audience} : {hack} pour {objectif} en {delai}",
+      "Le secret du feed pour {promesse} (preuve inside)",
+      "{audience}, {provocation}. Voilà mieux : {solution_courte}",
+      "{nombre} hooks qui {impact} vos {objectif} — testez #1",
+      "Si tu {situation}, fais {action} maintenant (et {gain})"
+    ];
+    const BANK = {
+      question:["Et si","Tu veux vraiment","On parle vrai —","Soyons honnêtes —","Devine quoi :"],
+      obstacle:["pub","budget","logiciel pro","monter 2h","danser","montrer ton visage"],
+      revelation:["l’algorithme ne t’ignore pas, tu es flou","ton hook tue ton watchtime","la preuve sociale compte moins que ton angle"],
+      mauvaise_pratique:["raconter toute l’histoire avant le bénéfice","poser une question molle","commencer sans contexte","mettre 6 hashtags fourre-tout"],
+      solution_courte:["commence par le résultat","pose une tension puis la promesse","donne un chiffre, puis le comment","montre avant/après en 2s"],
+      hack:["ce cadre en 3 étapes","ce template 7 mots","la méthode 3–30–3","le cadrage bénéfice->preuve->CTA"],
+      impact:["boostent","doublent","sauvent","explosent"],
+      situation:["galères à accrocher","postes sans engagement","as 0 idées de vidéos","lances une offre"],
+      action:["ce hook","ce cadre","cette question","ce format"],
+      gain:["tu gagnes +30% de watch","tu récupères l’attention","tu vends sans forcer"],
+    };
+
+    function offlineGenerate(){
+      const niche = $('niche').value.trim();
+      const audience = $('audience').value.trim() || "créateurs";
+      const benefit = $('benefit').value.trim() || "doper ton engagement";
+      const tone = 'intrigant';
+      const count = parseInt($('count').value,10) || 10;
+
+      const delai = rand(["24h","7 jours","30 minutes","3 étapes","3 vidéos"]);
+      const nombre = rand(["3","5","7","10"]);
+      const objectif = niche || "contenus";
+      const promesse = benefit || "des résultats";
+      const provocation = {"cash":"Ton contenu est plat","intrigant":"Tu passes à côté d’un truc","bienveillant":"Tu peux faire mieux","humour":"Spoiler : le scroll t’a oublié","urgent":"Dernière chance avant le flop","educatif":"Règle simple :"}[tone] || "Tu peux faire mieux";
+
+      const list = [];
+      for(let i=0;i<count*2;i++){
+        let out = rand(TEMPLATES)
+          .replace("{audience}", audience)
+          .replace("{promesse}", promesse)
+          .replace("{delai}", delai)
+          .replace("{question}", rand(BANK.question))
+          .replace("{obstacle}", rand(BANK.obstacle))
+          .replace("{revelation}", rand(BANK.revelation))
+          .replace("{mauvaise_pratique}", rand(BANK.mauvaise_pratique))
+          .replace("{solution_courte}", rand(BANK.solution_courte))
+          .replace("{hack}", rand(BANK.hack))
+          .replace("{objectif}", objectif)
+          .replace("{nombre}", nombre)
+          .replace("{impact}", rand(BANK.impact))
+          .replace("{situation}", rand(BANK.situation))
+          .replace("{action}", rand(BANK.action))
+          .replace("{gain}", rand(BANK.gain))
+          .replace("{provocation}", provocation);
+        out = capIntro(limitWords(maybeEmoji(out)));
+        list.push(out);
+      }
+      render(uniq(list).slice(0,count));
+      toast("Généré en offline");
+    }
+
+    async function boostGenerate(){
+      const payload = {
+        niche: $('niche').value,
+        audience: $('audience').value || "créateurs",
+        benefit: $('benefit').value || "doper l’engagement",
+        tone: $('tone').value,
+        count: parseInt($('count').value,10) || 10
+      };
+      try{
+        const res = await fetch("/api/generate-hooks", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error(await res.text());
+        const { hooks=[] } = await res.json();
+        if(!hooks.length) throw new Error("Pas de hooks reçus");
+        render(hooks);
+        toast("Généré via Boost AI");
+      }catch(e){
+        console.error(e);
+        toast("Erreur Boost. Je passe en offline.");
+        offlineGenerate();
+      }
+    }
+
+    function render(arr){
+      const box = $('list'); box.innerHTML = '';
+      if(!arr.length){ box.innerHTML = '<div class="sub">Rien à afficher.</div>'; return; }
+      arr.forEach(h => {
+        const row = document.createElement('div'); row.className='hook';
+        const span = document.createElement('span'); span.textContent = h;
+        const btn = document.createElement('button'); btn.className='btn secondary copy'; btn.textContent='Copier';
+        btn.onclick = async ()=>{ try{ await navigator.clipboard.writeText(h); btn.textContent='Copié'; setTimeout(()=>btn.textContent='Copier',1000);}catch{} };
+        row.appendChild(span); row.appendChild(btn); box.appendChild(row);
+      });
+    }
+
+    document.getElementById('offline').onclick = offlineGenerate;
+    document.getElementById('boost').onclick = boostGenerate;
+    offlineGenerate();
+  </script>
+</body>
+</html>
