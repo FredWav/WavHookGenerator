@@ -16,19 +16,17 @@ export default async function handler(req) {
 
   const body = await req.json().catch(()=> ({}));
   const {
-    niche = "", audience = "créateurs",
-    benefit = "doper l’engagement", tone = "intrigant",
-    count = 10
+    niche = "", theme = "", audience = "", tone = "intrigant", count = 10
   } = body;
   const safeCount = Math.min(Math.max(parseInt(count || 10, 10), 1), 20);
 
-  const system = "Tu es expert des hooks short-form. Retourne UNIQUEMENT un JSON {\"hooks\": string[]} : hooks ultra brefs (<= 12 mots), FR, variés, percutants, adaptés à la niche et au ton. Pas d’intros, pas de commentaires.";
+  const system = "Tu es expert des hooks short-form. Retourne UNIQUEMENT un objet JSON {\"hooks\": string[]} : hooks ultra brefs (<= 12 mots), FR, variés, percutants, adaptés à la niche, au thème et au ton. Pas d’intro, pas de commentaires. Pas de hashtags.";
   const user = `Niche: ${niche}
-Audience: ${audience}
-Bénéfice: ${benefit}
+Thème: ${theme}
+Audience (optionnel): ${audience || "—"}
 Ton: ${tone}
 Nombre: ${safeCount}
-Contraintes: style natif TikTok/Instagram, éviter répétitions, éviter jargon, pas de hashtags.`;
+Contraintes: 3 premières secondes impact; éviter répétitions; éviter jargon; éviter emojis; éviter guillemets; pas de point final si possible.`;
 
   try {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
