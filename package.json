@@ -1,8 +1,6 @@
 {
-  "name": "hook-generator-capte-pro-plus",
+  "name": "hook-generator-pro",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=18"
-  }
+  "engines": { "node": ">=18" }
 }
