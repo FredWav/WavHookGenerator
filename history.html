@@ -1,150 +1,186 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historique</title>
-    <style>
-        :root {
-            --bg-color: #ffffff;
-            --fg-color: #1f1f1f;
-            --primary-color: #0078d4;
-            --secondary-color: #f3f3f3;
-            --card-bg: #ffffff;
-            --input-bg: #ffffff;
-            --input-border: #cccccc;
-        }
-        [data-theme="dark"] {
-            --bg-color: #121212;
-            --fg-color: #eeeeee;
-            --primary-color: #3399ff;
-            --secondary-color: #1e1e1e;
-            --card-bg: #1e1e1e;
-            --input-bg: #1e1e1e;
-            --input-border: #444444;
-        }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--fg-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background-color: var(--secondary-color);
-        }
-        .container {
-            padding: 2rem;
-        }
-        select {
-            padding: 0.5rem;
-            background-color: var(--input-bg);
-            color: var(--fg-color);
-            border: 1px solid var(--input-border);
-            border-radius: 4px;
-        }
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid var(--input-border);
-            padding: 0.5rem;
-        }
-        th {
-            background-color: var(--secondary-color);
-        }
-    </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="color-scheme" content="dark light"/>
+<title>Historique & Favoris – PRO++</title>
+<style>
+  :root{
+    --bg:#F7F3EE; --card:#FFFFFF; --ink:#111827; --muted:#6B7280; --border:#E5E7EB;
+    --blue:#61A8FF; --shadow:0 10px 30px rgba(0,0,0,.08); --radius:18px;
+  }
+  [data-theme="dark"]{
+    --bg: radial-gradient(1200px 600px at 20% -10%, #1b2a3a 0%, #0c1722 45%, #0a121a 100%);
+    --card: linear-gradient(180deg, #13202d 0%, #0f1a26 100%);
+    --ink:#e9eef6; --muted:#9aa6b2; --border:#1f2b3a; --blue:#60a5fa; --shadow:0 12px 40px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
+  header{max-width:1100px;margin:20px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+  h1{margin:0;font-size:clamp(20px,2.4vw,30px)}
+  nav{display:flex;gap:10px;align-items:center}
+  nav a{color:var(--ink);text-decoration:none;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:var(--card)}
+  .wrap{max-width:1100px;margin:0 auto 40px;padding:0 16px;display:grid;gap:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .inner{padding:18px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  input[type="text"]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--ink)}
+  .pill{display:inline-block;padding:2px 8px;border:1px solid var(--border);border-radius:999px;font-size:12px;background:transparent;color:var(--ink);margin-right:6px}
+  .btn{border:1px solid var(--border);padding:8px 12px;border-radius:10px;background:transparent;color:var(--ink);cursor:pointer}
+  table{width:100%;border-collapse:collapse}
+  th,td{padding:10px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+  .muted{color:var(--muted)}
+  .hook{padding:8px;border:1px solid var(--border);border-radius:10px;background:transparent;margin-bottom:8px}
+</style>
 </head>
-<body data-theme="auto">
-    <header>
-        <h1>Historique</h1>
-        <label for="themeSelect">Thème :
-            <select id="themeSelect">
-                <option value="auto">Auto</option>
-                <option value="light">Clair</option>
-                <option value="dark">Sombre</option>
-            </select>
-        </label>
-    </header>
-    <div class="container">
-        <div class="card">
-            <h2>Historique des actions</h2>
-            <p>Cette page illustre la persistance du thème à travers différentes pages. Les données ci-dessous sont fictives.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Action</th>
-                        <th>Détails</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2025-07-15</td>
-                        <td>Connexion</td>
-                        <td>L'utilisateur s'est connecté.</td>
-                    </tr>
-                    <tr>
-                        <td>2025-07-16</td>
-                        <td>Modification</td>
-                        <td>L'utilisateur a changé le thème.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <script>
-        (function() {
-            const selectEl = document.getElementById('themeSelect');
-            const root = document.body;
+<body>
+  <header>
+    <h1>Historique & Favoris</h1>
+    <nav>
+      <label for="themeSelect" class="muted">Thème</label>
+      <select id="themeSelect">
+        <option value="auto" selected>Auto</option>
+        <option value="light">Clair</option>
+        <option value="dark">Sombre</option>
+      </select>
+      <a href="index.html">← Retour générateur</a>
+    </nav>
+  </header>
 
-            function applyTheme(theme) {
-                if (theme === 'auto') {
-                    root.dataset.theme = getPreferredScheme();
-                } else {
-                    root.dataset.theme = theme;
-                }
-            }
+  <section class="wrap">
+    <div class="card"><div class="inner">
+      <div class="row">
+        <input id="q" type="text" placeholder="Rechercher par niche, thème, plateforme, hook…"/>
+        <button class="btn" id="exportCSV">Exporter CSV</button>
+        <button class="btn" id="exportTXT">Exporter TXT</button>
+        <button class="btn" id="clear">Vider l'historique</button>
+      </div>
+    </div></div>
 
-            function getPreferredScheme() {
-                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
+    <div class="card"><div class="inner" id="list"></div></div>
+  </section>
 
-            function handleSystemChange(e) {
-                const stored = localStorage.getItem('ui_theme_choice') || 'auto';
-                if (stored === 'auto') {
-                    applyTheme('auto');
-                }
-            }
+<script>
+  // Thème
+  const THEME_KEY='ui_theme_pref';
+  const themeSel=document.getElementById('themeSelect');
+  const mediaDark=window.matchMedia('(prefers-color-scheme: dark)');
+  function applyTheme(pref){
+    if(pref==='light'){ document.documentElement.setAttribute('data-theme','light'); return; }
+    if(pref==='dark'){  document.documentElement.setAttribute('data-theme','dark');  return; }
+    document.documentElement.setAttribute('data-theme', mediaDark.matches ? 'dark' : 'light');
+  }
+  function getPref(){ return localStorage.getItem(THEME_KEY) || 'auto'; }
+  function setPref(v){ localStorage.setItem(THEME_KEY, v); }
+  themeSel.value=getPref(); applyTheme(themeSel.value);
+  themeSel.onchange=()=>{ setPref(themeSel.value); applyTheme(themeSel.value); };
+  mediaDark.addEventListener?.('change', ()=>{ if(getPref()==='auto') applyTheme('auto'); });
 
-            function initTheme() {
-                const saved = localStorage.getItem('ui_theme_choice') || 'auto';
-                selectEl.value = saved;
-                applyTheme(saved);
-            }
+  // Historique
+  const KEY = 'hgpp_history_v1';
+  function loadHistory(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } }
+  function saveHistory(l){ try{ localStorage.setItem(KEY, JSON.stringify(l)); }catch{} }
 
-            selectEl.addEventListener('change', () => {
-                const value = selectEl.value;
-                localStorage.setItem('ui_theme_choice', value);
-                applyTheme(value);
-            });
+  function search(list, q){
+    if(!q) return list;
+    q = q.toLowerCase();
+    return list.filter(e =>
+      (e.niche||'').toLowerCase().includes(q) ||
+      (e.theme||'').toLowerCase().includes(q) ||
+      (e.platform||'').toLowerCase().includes(q) ||
+      (e.brief||'').toLowerCase().includes(q) ||
+      (e.hooks||[]).some(h => (h.text||'').toLowerCase().includes(q))
+    );
+  }
 
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemChange);
+  function render(){
+    const root=document.getElementById('list');
+    const q=document.getElementById('q').value.trim();
+    const data=search(loadHistory(), q);
+    if(!data.length){ root.innerHTML='<div class="muted">Aucun enregistrement.</div>'; return; }
 
-            initTheme();
-        })();
-    </script>
+    root.innerHTML=data.map(e=>{
+      const best=(e.hooks||[]).reduce((a,b)=> a.score>=b.score?a:b, {score:0,grade:'F'});
+      const favCount=(e.hooks||[]).filter(h=>h.fav).length;
+      const perf=e.performance ? `• ER: ${(e.performance.er||0).toFixed(2)}%` : '';
+      return `
+        <div class="entry" data-id="${e.id}" style="margin-bottom:16px">
+          <div class="row" style="justify-content:space-between">
+            <div>
+              <span class="pill">${e.platform||''}</span>
+              <span class="pill">${e.tone||''}</span>
+              ${(e.categories||[]).map(c=>`<span class="pill">${c}</span>`).join('')}
+            </div>
+            <div class="muted">${new Date(e.ts).toLocaleString()}</div>
+          </div>
+          <div style="margin:6px 0"><b>${e.video?.title || e.theme}</b> — <span class="muted">${e.niche}</span></div>
+          ${e.video?.link ? `<div><a href="${e.video.link}" target="_blank">${e.video.link}</a></div>` : ''}
+          <div class="row" style="margin:6px 0">
+            <span class="pill">Best: ${best.grade} (${best.score}/100)</span>
+            <span class="pill">Hooks: ${e.count}</span>
+            <span class="pill">Favoris: ${favCount}</span>
+            ${e.performance ? `<span class="pill">Résultats ${perf}</span>` : ''}
+          </div>
+          <div class="muted">${e.brief || ''}</div>
+          <div style="margin-top:8px">
+            ${(e.hooks||[]).slice(0,3).map(h=>`<div class="hook"><b>${h.grade}</b> ${h.text}</div>`).join('')}
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn" onclick="reuse('${e.id}')">Réutiliser ce brief</button>
+            <button class="btn" onclick="details('${e.id}')">Détails & performances</button>
+            <button class="btn" onclick="delEntry('${e.id}')">Supprimer</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function reuse(id){
+    const e=loadHistory().find(x=>x.id===id); if(!e) return;
+    const resume={ platform:e.platform,niche:e.niche,theme:e.theme,tone:e.tone,audience:e.audience,brief:e.brief,count:e.count,categories:e.categories,intensity:e.intensity };
+    localStorage.setItem('hgpp_resume', JSON.stringify(resume));
+    location.href='index.html';
+  }
+
+  function details(id){
+    const list=loadHistory(); const e=list.find(x=>x.id===id); if(!e) return;
+    const edit = confirm("Saisir/mettre à jour les résultats ?");
+    if(edit){
+      const views=parseInt(prompt("Vues :", e.performance?.views||0)||0,10);
+      const likes=parseInt(prompt("Likes :", e.performance?.likes||0)||0,10);
+      const comments=parseInt(prompt("Commentaires :", e.performance?.comments||0)||0,10);
+      const shares=parseInt(prompt("Partages :", e.performance?.shares||0)||0,10);
+      const saves=parseInt(prompt("Enregistrements :", e.performance?.saves||0)||0,10);
+      const er=views>0?((likes+comments+shares+saves)/views)*100:0;
+      e.performance={views,likes,comments,shares,saves,er}; saveHistory(list); render();
+    } else {
+      alert("Ouvre de nouveau pour saisir les performances.");
+    }
+  }
+
+  function delEntry(id){ const next=loadHistory().filter(x=>x.id!==id); saveHistory(next); render(); }
+
+  function download(name, content, mime='text/plain'){ const b=new Blob([content],{type:mime}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(u),500); }
+
+  function toCSV(rows){
+    const esc=s=>(''+s).replace(/"/g,'""');
+    const header=["id","date","platform","niche","theme","tone","audience","brief","intensity","categories","count","video_title","video_link","hook_grade","hook_score","hook_text","er"];
+    const lines=[header.join(",")];
+    rows.forEach(e=> (e.hooks||[]).forEach(h=>{
+      lines.push([e.id,new Date(e.ts).toLocaleString(),e.platform,e.niche,e.theme,e.tone,e.audience||'',(e.brief||'').slice(0,200),e.intensity,(e.categories||[]).join('|'),e.count,e.video?.title||'',e.video?.link||'',h.grade,h.score,esc(h.text),e.performance?.er?.toFixed(2)||''].map(x=>`"${esc(x)}"`).join(","));
+    }));
+    return lines.join("\n");
+  }
+  function toTXT(rows){
+    const out=[]; rows.forEach(e=>{ out.push(`=== ${new Date(e.ts).toLocaleString()} — ${e.platform} — ${e.niche} | ${e.theme}`); out.push(`Ton: ${e.tone} | Catégories: ${(e.categories||[]).join(', ')} | Intensité: ${e.intensity}`); if(e.video?.title) out.push(`Vidéo: ${e.video.title} (${e.video.link||''})`); if(e.brief) out.push(`Brief: ${e.brief}`); (e.hooks||[]).forEach((h,i)=> out.push(`${i+1}. [${h.grade} ${h.score}/100] ${h.text}`)); if(e.performance){ out.push(`Résultats: Vues ${e.performance.views}, Likes ${e.performance.likes}, Comms ${e.performance.comments}, Partages ${e.performance.shares}, Enregs ${e.performance.saves}, ER ${e.performance.er?.toFixed(2)}%`);} out.push(""); }); return out.join("\n");
+  }
+
+  document.getElementById('exportCSV').onclick=()=>download('hooks_history.csv', toCSV(loadHistory()), 'text/csv');
+  document.getElementById('exportTXT').onclick=()=>download('hooks_history.txt', toTXT(loadHistory()), 'text/plain');
+  document.getElementById('clear').onclick=()=>{ if(confirm("Supprimer tout l'historique ?")){ localStorage.removeItem(KEY); render(); } };
+  document.getElementById('q').oninput=render;
+
+  render();
+</script>
 </body>
 </html>
