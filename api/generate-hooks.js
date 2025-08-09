@@ -5,7 +5,7 @@ function json(res, status = 200) {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization"
   };
   return new Response(JSON.stringify(res), { status, headers });
 }
@@ -14,7 +14,7 @@ export default async function handler(req) {
   if (req.method === "OPTIONS") return json({ ok: true });
   if (req.method !== "POST") return json({ error: "Use POST" }, 405);
 
-  const body = await req.json().catch(()=> ({}));
+  const body = await req.json().catch(() => ({}));
   const {
     platform = "tiktok", niche = "", theme = "", tone = "intrigant", audience = "",
     brief = "", intensity = "normal", priorityCategories = [], count = 10
@@ -30,11 +30,10 @@ export default async function handler(req) {
     agressif: "Emotion forte: FOMO, urgence, controverse. Formulations tranchées mais non offensantes."
   }[String(intensity).toLowerCase()] || "Emotion nette, pattern‑interrupt assumé.";
 
-  // Platform style guide (validated high‑level rules)
   const platformGuide = {
     tiktok: "Style très cut et émotionnel. Accroche immédiate <2s. Phrases courtes (<=10-12 mots). FOMO/contraste assumés. Lexique direct.",
     reels: "Style share/save-friendly. Promesse claire, bénéfice concret, ton plus clean. Toujours court mais moins haché que TikTok.",
-    shorts: "Accroche explicite du sujet + curiosité. Bon pour chiffré/how-to/teaser. Clarté early. Peut s'étendre jusqu'à 60-180s, hook court requis."
+    shorts: "Accroche explicite du sujet + curiosité. Bon pour chiffré/how-to/teaser. Clarté early. Hook court requis."
   }[String(platform).toLowerCase()] || "Style court et clair.";
 
   const mustInclude = picked.length
@@ -70,8 +69,8 @@ Contraintes supplémentaires:
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
@@ -80,7 +79,7 @@ Contraintes supplémentaires:
           { role: "system", content: system },
           { role: "user", content: user }
         ]
-      }),
+      })
     });
 
     if (!r.ok) {
