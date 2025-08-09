@@ -6,6 +6,10 @@
       "dest": "/api/$1"
     },
     {
+      "src": "/(history|index)\\.html",
+      "dest": "/$1.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }

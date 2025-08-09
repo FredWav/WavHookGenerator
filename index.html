@@ -3,54 +3,72 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Générateur de Hooks – Boost AI</title>
+  <title>Générateur de Hooks – PRO++</title>
   <style>
     :root{ --cream:#F7F3EE; --card:#FFFFFF; --ink:#111827; --muted:#6B7280;
-      --blue:#61A8FF; --blue-strong:#3E8FFF; --border:#E5E7EB; --shadow:0 10px 30px rgba(0,0,0,.08); --radius:18px; }
+      --blue:#61A8FF; --blue-strong:#3E8FFF; --border:#E5E7EB; --shadow:0 10px 30px rgba(0,0,0,.08); --radius:18px;
+      --good:#16a34a; --mid:#f59e0b; --bad:#ef4444; }
     *{box-sizing:border-box}
     body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
-    header{max-width:980px;margin:24px auto 12px;padding:0 16px}
-    h1{margin:0 0 6px;font-size:clamp(22px,2.6vw,34px)}
-    .sub{color:var(--muted)}
-    .wrap{max-width:980px;margin:0 auto 40px;padding:0 16px;display:grid;gap:16px}
+    header{max-width:1100px;margin:20px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+    h1{margin:0;font-size:clamp(20px,2.4vw,30px)}
+    nav a{color:var(--ink);text-decoration:none;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:#fff}
+    .wrap{max-width:1100px;margin:0 auto 40px;padding:0 16px;display:grid;gap:16px}
     .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
     .inner{padding:18px}
     .grid{display:grid;gap:12px}
-    @media(min-width:720px){.grid.cols-2{grid-template-columns:1fr 1fr} .grid.cols-3{grid-template-columns:1fr 1fr 1fr}}
+    @media(min-width:900px){.grid.cols-2{grid-template-columns:1fr 1fr} .grid.cols-3{grid-template-columns:1fr 1fr 1fr}}
     label{font-weight:600;display:block;margin-bottom:6px}
-    input[type="text"],select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#FAFAFA}
+    input[type="text"],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#FAFAFA}
+    textarea{min-height:70px;resize:vertical}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .btn{border:0;padding:12px 14px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow);transition:background .2s, transform .04s}
     .btn:hover{background:var(--blue-strong)} .btn:active{transform:translateY(1px)}
     .btn.secondary{background:#fff;color:#111;border:1px solid var(--border)}
     .list{display:grid;gap:10px}
-    .hook{padding:10px 12px;border:1px dashed var(--border);border-radius:12px;background:#FCFCFD;display:flex;gap:10px;align-items:start}
-    .hook span{flex:1}
-    .hook .copy{white-space:nowrap}
+    .hook{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#FCFCFD;display:grid;gap:8px}
+    .hook-top{display:flex;gap:10px;align-items:start}
+    .hook span.text{flex:1}
+    .score{display:flex;align-items:center;gap:10px}
+    .score .bar{position:relative;width:180px;height:10px;background:#eee;border-radius:999px;overflow:hidden}
+    .score .bar i{position:absolute;left:0;top:0;bottom:0;width:0%}
+    .score .grade{font-weight:800;min-width:28px;text-align:center}
+    .score.good i{background:var(--good)} .score.mid i{background:var(--mid)} .score.bad i{background:var(--bad)}
+    .fav{border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
+    .note{font-size:12px;color:var(--muted)}
     .tip{margin-top:6px;padding:10px 12px;border-left:4px solid var(--blue);background:#F8FAFF;border-radius:10px}
-    .small{font-size:12.5px}
-    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#111;color:#fff;padding:10px 14px;border-radius:999px;display:none}
   </style>
 </head>
 <body>
   <header>
     <h1>Générateur de hooks</h1>
-    <div class="sub">Renseigne <b>niche</b>, <b>thème</b>, <b>ton</b>. <span class="muted">La cible est optionnelle.</span></div>
+    <nav>
+      <a href="history.html">Historique & Favoris</a>
+    </nav>
   </header>
 
   <section class="wrap">
     <div class="card">
       <div class="inner">
-        <div class="grid cols-2">
+        <div class="grid cols-3">
+          <div>
+            <label for="platform">Plateforme</label>
+            <select id="platform">
+              <option value="tiktok" selected>TikTok</option>
+              <option value="reels">Instagram Reels</option>
+              <option value="shorts">YouTube Shorts</option>
+            </select>
+          </div>
           <div>
             <label for="niche">Niche (obligatoire)</label>
-            <input id="niche" type="text" placeholder="ex : formation en ligne / montage vidéo / fitness"/>
+            <input id="niche" type="text" placeholder="ex : parodie musicale / montage vidéo / fitness"/>
           </div>
           <div>
             <label for="theme">Thème de la vidéo (obligatoire)</label>
-            <input id="theme" type="text" placeholder="ex : comment monter plus vite / perdre 5kg / automatiser Notion"/>
+            <input id="theme" type="text" placeholder="ex : parodie Obispo / perte de poids 5kg / automatiser Notion"/>
           </div>
         </div>
+
         <div class="grid cols-3" style="margin-top:8px">
           <div>
             <label for="tone">Ton</label>
@@ -58,175 +76,268 @@
               <option value="intrigant">Intrigant</option>
               <option value="bienveillant">Bienveillant</option>
               <option value="cash">Cash</option>
-              <option value="humour">Humour</option>
+              <option value="humour" selected>Humour</option>
               <option value="urgent">Urgent</option>
               <option value="educatif">Éducatif</option>
             </select>
           </div>
           <div>
             <label for="audience">Cible (optionnel)</label>
-            <input id="audience" type="text" placeholder="ex : débutants, freelances, mamans pressées"/>
+            <input id="audience" type="text" placeholder="ex : débutants, freelances…"/>
           </div>
           <div>
             <label for="count">Nombre</label>
             <select id="count">
               <option>5</option>
-              <option selected>10</option>
+              <option>10</option>
               <option>15</option>
+              <option>20</option>
+              <option>25</option>
             </select>
           </div>
         </div>
+
+        <div style="margin-top:8px">
+          <label for="brief">Brief libre (optionnel)</label>
+          <textarea id="brief" placeholder="Contexte, blague interne, contrainte de style, référence précise…"></textarea>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:8px">
+          <div>
+            <label>Intensité émotionnelle</label>
+            <div class="row">
+              <span class="note">Léger</span>
+              <input id="intensity" type="range" min="1" max="3" step="1" value="2" />
+              <span class="note">Agressif</span>
+            </div>
+          </div>
+          <div>
+            <label>Catégories prioritaires (multi‑choix)</label>
+            <div class="row" id="catChips">
+              <label><input type="checkbox" value="question"/> Question</label>
+              <label><input type="checkbox" value="negatif"/> Négatif</label>
+              <label><input type="checkbox" value="controverse"/> Controversé</label>
+              <label><input type="checkbox" value="promesse"/> Promesse</label>
+              <label><input type="checkbox" value="chiffres"/> Chiffres</label>
+              <label><input type="checkbox" value="experience"/> Expérience</label>
+              <label><input type="checkbox" value="surprenant"/> Surprenant</label>
+              <label><input type="checkbox" value="suspense"/> Suspense</label>
+              <label><input type="checkbox" value="fomo"/> FOMO</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:8px">
+          <div>
+            <label for="videoLink">Lien de la vidéo (optionnel)</label>
+            <input id="videoLink" type="url" placeholder="https://..."/>
+          </div>
+          <div>
+            <label for="videoTitle">Titre / repère (optionnel)</label>
+            <input id="videoTitle" type="text" placeholder="ex : Parodie Obispo – Savoir Emmerder"/>
+          </div>
+        </div>
+
         <div class="row" style="margin-top:12px">
-          <button id="boost" class="btn">Boost AI</button>
-          <button id="offline" class="btn secondary">Offline (amélioré)</button>
+          <button id="boost" class="btn">Générer (Boost AI)</button>
           <button id="copyAll" class="btn secondary">Tout copier</button>
         </div>
-        <p class="tip small">Conseil : commence par un verbe/numéro, promets un bénéfice clair, pas de blabla. Offline est un fallback amélioré; privilégie Boost AI.</p>
+        <p class="tip">Astuce : sois précis dans “Niche” et “Thème”. Sélectionne la plateforme pour un style adapté.</p>
       </div>
     </div>
 
     <div class="card">
       <div class="inner">
-        <h3 style="margin:0 0 6px">Hooks</h3>
+        <h3 style="margin:0 0 6px">Hooks (avec score)</h3>
         <div id="list" class="list"></div>
       </div>
     </div>
   </section>
 
-  <div id="toast" class="toast"></div>
-
   <script>
     const $ = (id) => document.getElementById(id);
-    function toast(msg){ const t=$('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1500); }
-    const uniq = (arr) => [...new Set(arr.map(s=>s.trim()))];
+    const nowISO = () => new Date().toISOString();
 
-    // OFFLINE amélioré (templates + scoring)
-    const TEMPLATES = [
-      "Et si tu {action} pour {benefice} ?",
-      "{nombre} erreurs qui ruinent {objectif} — corrige-les aujourd’hui",
-      "Tu veux {benefice} sans {obstacle} ? Fais {action}",
-      "{nombre} minutes pour {benefice} — {preuve}",
-      "{pourcentage}% de {resultat} avec {methode} (testé)",
-      "Arrête {mauvaise_pratique} : fais ça et {benefice}",
-      "Tout le monde fait {mauvaise_pratique}. Voilà mieux : {methode}",
-      "Comment {action} pour {benefice} en {delai}",
-      "Avant/après : de {situation_avant} à {benefice} en {delai}",
-      "Hier, {situation_avant}. Aujourd’hui, {benefice}. Voilà comment."
-    ];
-
-    const BANK = {
-      action: ["changer ton intro","poser un chiffre avant tout","montrer le résultat d’entrée","utiliser le cadre 3–30–3","poser une question choc"],
-      benefice: ["doubler ton watchtime","x2 tes vues","lancer ton offre","vendre sans forcer","gagner 1h/jour"],
-      obstacle: ["pub","budget","logiciel pro","monter 2h","danser","montrer ton visage"],
-      objectif: ["tes Reels","tes TikToks","tes Shorts","ton montage","tes ventes"],
-      preuve: ["preuve en 3 clips","cas réel","stat vraie","avant/après","screens"],
-      pourcentage: ["30","50","80","120"],
-      resultat: ["vues","watchtime","clicks","ventes"],
-      methode: ["ce template 7 mots","ce cadre en 3 étapes","la checklist 3‑30‑3","preuve->méthode->CTA"],
-      mauvaise_pratique: ["raconter avant d’accrocher","parler de toi trop tôt","6 hashtags fourre‑tout","question molle"],
-      delai: ["24h","7 jours","30 minutes","3 vidéos","3 étapes"],
-      situation_avant: ["0 idées","scroll infini","intro molle","hook plat"],
-      nombre: ["3","5","7","10"]
-    };
-    const START_VERBS = ["STOP","COMMENT","ARRÊTE","ET SI","AVANT/APRÈS","VOILÀ","TU VEUX","HIER"];
-
-    function fillTemplate(niche, theme, tone, audience){
-      const pick = (k)=> BANK[k][Math.floor(Math.random()*BANK[k].length)];
-      let out = TEMPLATES[Math.floor(Math.random()*TEMPLATES.length)]
-        .replace("{action}", pick("action"))
-        .replace("{benefice}", pick("benefice"))
-        .replace("{obstacle}", pick("obstacle"))
-        .replace("{objectif}", theme || niche || pick("objectif"))
-        .replace("{preuve}", pick("preuve"))
-        .replace("{pourcentage}", pick("pourcentage"))
-        .replace("{resultat}", pick("resultat"))
-        .replace("{methode}", pick("methode"))
-        .replace("{mauvaise_pratique}", pick("mauvaise_pratique"))
-        .replace("{delai}", pick("delai"))
-        .replace("{situation_avant}", pick("situation_avant"))
-        .replace("{nombre}", pick("nombre"));
-      if (niche && Math.random()<0.8 && !out.toLowerCase().includes(niche.toLowerCase())) out = out + " — " + niche;
-      if (theme && Math.random()<0.8 && !out.toLowerCase().includes(theme.toLowerCase())) out = out + " — " + theme;
-      if (tone==="cash") out = out.replace("?", " !").replace("Arrête","ARRÊTE").replace("Et si","STOP");
-      if (tone==="bienveillant") out = out.replace("ARRÊTE","Arrête").replace("STOP","Et si");
-      if (tone==="urgent") out = out.replace("Aujourd’hui","Maintenant").replace(" ?"," ? Vite.");
-      if (audience && Math.random()<0.7) out = `${audience} : ${out}`;
-      return tighten(out);
-    }
-    function tighten(s){
-      s = s.replace(/[\"“”'’]/g,"");
-      const words = s.split(/\s+/);
-      if (words.length > 12) s = words.slice(0,12).join(" ") + "…";
-      const first = s.split(" ")[0].toUpperCase();
-      if (START_VERBS.includes(first)===false && Math.random()<0.4){
-        const w = s.split(" "); const n = Math.min(4, Math.max(2, Math.ceil(w.length*0.25)));
-        s = w.map((x,i)=> i<n ? x.toUpperCase() : x).join(" ");
-      }
-      return s.replace(/\s+/g," ").trim();
-    }
+    // --- Scoring façon "Social Blade": lettre + barre + note/100 ---
     function scoreHook(h, niche, theme){
-      let sc = 0;
-      const first = h.split(" ")[0];
-      if (/^\d/.test(first)) sc += 2;
-      if (START_VERBS.includes(first.toUpperCase())) sc += 2;
-      if (niche && h.toLowerCase().includes(niche.toLowerCase())) sc += 2;
-      if (theme && h.toLowerCase().includes(theme.toLowerCase())) sc += 2;
-      const words = h.split(/\s+/).length;
-      if (words<=12) sc += 2; else sc -= (words-12);
-      if (/[!?:—]/.test(h)) sc += 1;
-      return sc;
+      let s = 0;
+      const words = h.trim().split(/\s+/).length;
+      if (words <= 12) s += 20;        // concision
+      if (/^\d/.test(h) || /^[A-ZÉÈÀÂÔÎÛÄËÏÖÜÇ]{2,}/.test(h)) s += 15; // chiffre/MAJ fort
+      if (/[!?]/.test(h)) s += 10;     // ponctuation d'impact
+      if (niche && h.toLowerCase().includes(niche.toLowerCase())) s += 15;
+      if (theme && h.toLowerCase().includes(theme.toLowerCase())) s += 15;
+      if (/ne scrolle pas|arrête|stop|fomo|dernier|ultime|maintenant/i.test(h)) s += 10; // FOMO/urgence
+      if (/pourquoi|comment|tu savais|personne|devine/i.test(h)) s += 7; // curiosité
+      if (/pas|erreur|pire|interdit|illégal/i.test(h)) s += 6; // négatif/controverse
+      if (words > 12) s -= (words - 12) * 2; // pénalité longueur
+      s = Math.max(0, Math.min(100, s));
+      return s;
     }
-    function offlineGenerate(){
-      const niche = $('niche').value.trim();
-      const theme = $('theme').value.trim();
-      const tone = $('tone').value;
-      const audience = $('audience').value.trim();
-      const count = parseInt($('count').value,10) || 10;
-      if (!niche || !theme){ toast("Niche + Thème requis"); return; }
-      const pool = [];
-      for(let i=0;i<count*5;i++){ pool.push(fillTemplate(niche, theme, tone, audience)); }
-      const unique = uniq(pool);
-      const ranked = unique.map(h => ({h, s: scoreHook(h, niche, theme)})).sort((a,b)=> b.s - a.s).slice(0, count).map(x => x.h);
-      render(ranked); toast("Offline amélioré");
+    function gradeFromScore(s){
+      if (s>=90) return "A+";
+      if (s>=85) return "A";
+      if (s>=80) return "A-";
+      if (s>=70) return "B";
+      if (s>=60) return "C";
+      if (s>=50) return "D";
+      return "F";
     }
-    async function boostGenerate(){
-      const niche = $('niche').value.trim();
-      const theme = $('theme').value.trim();
-      const tone = $('tone').value;
-      const audience = $('audience').value.trim();
-      const count = parseInt($('count').value,10) || 10;
-      if (!niche || !theme){ toast("Niche + Thème requis"); return; }
-      try{
-        const res = await fetch("/api/generate-hooks", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({ niche, theme, audience, tone, count })
-        });
-        if(!res.ok) throw new Error(await res.text());
-        const { hooks=[] } = await res.json();
-        if(!hooks.length) throw new Error("Pas de hooks reçus");
-        render(hooks); toast("Boost AI");
-      }catch(e){
-        console.error(e); toast("Erreur Boost. Offline en secours."); offlineGenerate();
-      }
+
+    function barClass(s){ return s>=70 ? "good" : (s>=40 ? "mid" : "bad"); }
+
+    function getIntensity(){
+      const v = $('intensity').value;
+      return v === "1" ? "leger" : (v === "3" ? "agressif" : "normal");
     }
-    function render(arr){
+    function getCategories(){
+      return [...document.querySelectorAll('#catChips input:checked')].map(i=>i.value);
+    }
+    function getPayload(){
+      return {
+        platform: $('platform').value,
+        niche: $('niche').value.trim(),
+        theme: $('theme').value.trim(),
+        tone: $('tone').value,
+        audience: $('audience').value.trim(),
+        brief: $('brief').value.trim(),
+        intensity: getIntensity(),
+        priorityCategories: getCategories(),
+        count: parseInt($('count').value,10) || 10
+      };
+    }
+
+    function renderHooks(hooks, context){
       const box = $('list'); box.innerHTML = '';
-      if(!arr.length){ box.innerHTML = '<div class="sub">Rien à afficher.</div>'; return; }
-      arr.forEach(h => {
+      const scores = hooks.map(h => ({
+        text: h,
+        score: scoreHook(h, context.niche, context.theme),
+      })).map(o => ({...o, grade: gradeFromScore(o.score)}));
+
+      scores.forEach(({text, score, grade}, idx) => {
         const row = document.createElement('div'); row.className='hook';
-        const span = document.createElement('span'); span.textContent = h;
-        const btn = document.createElement('button'); btn.className='btn secondary copy'; btn.textContent='Copier';
-        btn.onclick = async ()=>{ try{ await navigator.clipboard.writeText(h); btn.textContent='Copié'; setTimeout(()=>btn.textContent='Copier',1000);}catch{} };
-        row.appendChild(span); row.appendChild(btn); box.appendChild(row);
+        const top = document.createElement('div'); top.className='hook-top';
+        const span = document.createElement('span'); span.className='text'; span.textContent = text;
+        const fav = document.createElement('button'); fav.className='fav'; fav.textContent='★ Favori'; fav.onclick = () => toggleFav(context._saveId, idx);
+        top.appendChild(span); top.appendChild(fav);
+
+        const sc = document.createElement('div'); sc.className='score '+barClass(score);
+        const gradeEl = document.createElement('div'); gradeEl.className='grade'; gradeEl.textContent = grade;
+        const bar = document.createElement('div'); bar.className='bar';
+        const fill = document.createElement('i'); fill.style.width = score+'%';
+        bar.appendChild(fill);
+        const note = document.createElement('div'); note.className='note'; note.textContent = score+'/100';
+        sc.appendChild(gradeEl); sc.appendChild(bar); sc.appendChild(note);
+
+        row.appendChild(top); row.appendChild(sc);
+        box.appendChild(row);
       });
     }
-    $('boost').onclick = boostGenerate;
-    $('offline').onclick = offlineGenerate;
-    $('copyAll').onclick = async ()=>{
-      const items = [...document.querySelectorAll('.hook span')].map(n=>n.textContent).join('\n');
+
+    // --- History storage (localStorage) ---
+    const KEY = 'hgpp_history_v1';
+
+    function loadHistory(){
+      try{ return JSON.parse(localStorage.getItem(KEY) || '[]'); }catch{ return []; }
+    }
+    function saveHistory(list){
+      try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch{}
+    }
+    function addHistory(entry){
+      const list = loadHistory();
+      list.unshift(entry);
+      if (list.length > 200) list.pop();
+      saveHistory(list);
+    }
+    function toggleFav(saveId, hookIndex){
+      const list = loadHistory();
+      const it = list.find(x => x.id === saveId);
+      if (!it) return;
+      it.hooks[hookIndex].fav = !it.hooks[hookIndex].fav;
+      saveHistory(list);
+      // Update UI star text quickly
+      const btns = document.querySelectorAll('.hook .fav');
+      if (btns[hookIndex]){
+        btns[hookIndex].textContent = it.hooks[hookIndex].fav ? '★ Favori' : '☆ Favori';
+      }
+    }
+
+    function saveSession(context, hooks){
+      const enriched = hooks.map((h, i) => {
+        const s = scoreHook(h, context.niche, context.theme);
+        return { text: h, score: s, grade: gradeFromScore(s), fav: false };
+      });
+      const best = enriched.reduce((a,b)=> a.score>=b.score?a:b, enriched[0] || {score:0});
+      const id = (Date.now().toString(36) + Math.random().toString(36).slice(2,7)).toUpperCase();
+      const entry = {
+        id,
+        ts: nowISO(),
+        platform: context.platform,
+        niche: context.niche,
+        theme: context.theme,
+        tone: context.tone,
+        audience: context.audience || '',
+        brief: context.brief || '',
+        intensity: context.intensity,
+        categories: context.priorityCategories || [],
+        count: enriched.length,
+        video: {
+          title: $('videoTitle').value.trim(),
+          link: $('videoLink').value.trim()
+        },
+        hooks: enriched,
+        performance: null // pourra être renseigné plus tard depuis l'historique
+      };
+      addHistory(entry);
+      return id;
+    }
+
+    async function generate(){
+      const payload = getPayload();
+      if (!payload.niche || !payload.theme){ alert("Niche + Thème requis"); return; }
+      const res = await fetch("/api/generate-hooks", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok){
+        const t = await res.text();
+        alert("Erreur API: " + t);
+        return;
+      }
+      const { hooks=[] } = await res.json();
+      // Save
+      const saveId = saveSession({...payload}, hooks);
+      // Render (and pass saveId for favorites toggle)
+      renderHooks(hooks, {...payload, _saveId: saveId});
+    }
+
+    document.getElementById('boost').onclick = generate;
+    document.getElementById('copyAll').onclick = async ()=>{
+      const items = [...document.querySelectorAll('.hook .text')].map(n=>n.textContent).join('\n');
       try{ await navigator.clipboard.writeText(items); }catch{}
     };
+
+    // Autofill from history resume (if any)
+    try{
+      const resume = JSON.parse(localStorage.getItem('hgpp_resume') || 'null');
+      if (resume){
+        $('platform').value = resume.platform || 'tiktok';
+        $('niche').value = resume.niche || '';
+        $('theme').value = resume.theme || '';
+        $('tone').value = resume.tone || 'intrigant';
+        $('audience').value = resume.audience || '';
+        $('brief').value = resume.brief || '';
+        $('count').value = String(resume.count || 10);
+        (resume.categories||[]).forEach(v => {
+          const el = document.querySelector(`#catChips input[value="${v}"]`);
+          if (el) el.checked = true;
+        });
+        const inten = resume.intensity || 'normal';
+        $('intensity').value = inten==='leger'?1 : inten==='agressif'?3 : 2;
+        localStorage.removeItem('hgpp_resume');
+      }
+    }catch{}
   </script>
 </body>
 </html>
