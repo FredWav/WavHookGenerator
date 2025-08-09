@@ -1,76 +1,279 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="color-scheme" content="dark light"/>
-<title>Générateur de Hooks – PRO++</title>
+<title>Générateur de Hooks – PRO</title>
 <style>
-  :root{
-    /* Light (par défaut) */
-    --bg:#F7F3EE; --card:#FFFFFF; --ink:#111827; --muted:#6B7280; --border:#E5E7EB;
-    --blue:#61A8FF; --blue-strong:#3E8FFF; --shadow:0 10px 30px rgba(0,0,0,.08);
-    --good:#16a34a; --mid:#f59e0b; --bad:#ef4444; --radius:18px;
-    --panel-grad: none;
+  :root {
+    --bg: #111111;
+    --bg-glow: radial-gradient(ellipse 80% 50% at 50% -20%,rgba(120,119,198,0.3),hsla(0,0%,100%,0));
+    --card-bg: rgba(24, 24, 27, 0.7);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --ink: #E4E4E7;
+    --muted: #A1A1AA;
+    --accent: #9333EA;
+    --accent-glow: radial-gradient(400px at var(--x) var(--y), rgba(147, 51, 234, 0.15), transparent 80%);
+    --accent-strong: #A855F7;
+    --radius: 16px;
+    --font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
   }
-  [data-theme="dark"]{
-    --bg: radial-gradient(1200px 600px at 20% -10%, #1b2a3a 0%, #0c1722 45%, #0a121a 100%);
-    --card: linear-gradient(180deg, #13202d 0%, #0f1a26 100%);
-    --ink:#e9eef6; --muted:#9aa6b2; --border:#1f2b3a;
-    --blue:#60a5fa; --blue-strong:#3b82f6; --shadow:0 12px 40px rgba(0,0,0,.35);
-    --panel-grad: linear-gradient(90deg, transparent, rgba(96,165,250,.35), rgba(255,79,163,.25), transparent);
+  
+  /* Reset & Base */
+  * { box-sizing: border-box; }
+  
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    background-image: var(--bg-glow);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
-  header{max-width:1100px;margin:20px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
-  h1{margin:0;font-size:clamp(20px,2.4vw,30px)}
-  nav{display:flex;gap:10px;align-items:center}
-  nav a{color:var(--ink);text-decoration:none;border:1px solid var(--border);padding:8px 12px;border-radius:999px;background:var(--card)}
-  .wrap{max-width:1100px;margin:0 auto 40px;padding:0 16px;display:grid;gap:16px}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .card::before{content:"";position:absolute;left:-2px;right:-2px;top:-2px;height:2px;background:var(--panel-grad)}
-  .inner{padding:18px}
-  .grid{display:grid;gap:12px}
-  @media(min-width:900px){.grid.cols-2{grid-template-columns:1fr 1fr} .grid.cols-3{grid-template-columns:1fr 1fr 1fr}}
-  label{font-weight:600;display:block;margin-bottom:6px}
-  input[type="text"],textarea,select,input[type="url"]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--ink)}
-  textarea{min-height:70px;resize:vertical}
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .btn{border:0;padding:12px 14px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;box-shadow:var(--shadow);transition:background .2s, transform .04s}
-  .btn:hover{background:var(--blue-strong)} .btn:active{transform:translateY(1px)}
-  .btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--border)}
-  .list{display:grid;gap:10px}
-  .hook{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:transparent;display:grid;gap:8px}
-  .hook-top{display:flex;gap:10px;align-items:start;justify-content:space-between}
-  .hook span.text{flex:1}
-  .score{display:flex;align-items:center;gap:10px}
-  .score .bar{position:relative;width:180px;height:10px;background:rgba(0,0,0,.08);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
-  [data-theme="dark"] .score .bar{background:linear-gradient(90deg,#2a3746,#223040)}
-  .score .bar i{position:absolute;left:0;top:0;bottom:0;width:0%}
-  .score .grade{font-weight:800;min-width:28px;text-align:center}
-  .score.good i{background:var(--good)} .score.mid i{background:var(--mid)} .score.bad i{background:var(--bad)}
-  .fav{border:1px solid var(--border);background:transparent;border-radius:999px;padding:6px 10px;cursor:pointer;color:var(--ink)}
-  .note{font-size:12px;color:var(--muted)}
-  .tip{margin-top:6px;padding:10px 12px;border-left:4px solid var(--blue);background:rgba(96,165,250,.08);border-radius:10px}
+
+  /* Layout */
+  .main-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media(min-width: 960px) {
+    .main-layout {
+      grid-template-columns: 420px 1fr;
+    }
+  }
+
+  /* Header */
+  header {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+  .history-link {
+    color: var(--ink);
+    text-decoration: none;
+    border: 1px solid var(--card-border);
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .history-link:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+  }
+  
+  /* Card */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+  }
+
+  /* Motion-aware accent glow effect */
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--accent-glow);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover::before { opacity: 1; }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .card-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: var(--muted);
+  }
+
+  /* Form Grid */
+  .form-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .form-grid .full-width { grid-column: 1 / -1; }
+  @media(min-width: 960px) {
+    .form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Form Elements */
+  label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    background: rgba(0,0,0,0.2);
+    color: var(--ink);
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+  }
+  textarea { min-height: 80px; resize: vertical; }
+
+  /* Category Chips */
+  .chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip-container label {
+    margin: 0;
+    cursor: pointer;
+  }
+  .chip-container input {
+    display: none;
+  }
+  .chip-container span {
+    display: block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .chip-container input:checked + span {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent-strong);
+  }
+  .chip-container label:hover span {
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  /* Buttons */
+  .btn {
+    border: 0;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn:active { transform: scale(0.98); }
+
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn.primary:hover { background: var(--accent-strong); }
+
+  .btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--ink);
+    border: 1px solid var(--card-border);
+  }
+  .btn.secondary:hover { background: rgba(255, 255, 255, 0.1); }
+  
+  /* Results List */
+  .hooks-list { display: grid; gap: 12px; }
+  .hook-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .hook-item .text { flex: 1; }
+  .hook-item .grade {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .copy-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: color 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Loader */
+  #loader { display: none; margin-top: 1rem; }
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--card-border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
 </style>
 </head>
 <body>
-  <header>
-    <h1>Générateur de hooks</h1>
-    <nav>
-      <label for="themeSelect" class="note">Thème</label>
-      <select id="themeSelect">
-        <option value="auto" selected>Auto</option>
-        <option value="light">Clair</option>
-        <option value="dark">Sombre</option>
-      </select>
-      <a href="history.html">Historique & Favoris</a>
-    </nav>
-  </header>
 
-  <section class="wrap">
-    <div class="card"><div class="inner">
-      <div class="grid cols-3">
+  <div class="main-layout">
+    <header>
+      <h1>Générateur de Hooks ✨</h1>
+      <a href="history.html" class="history-link">Historique</a>
+    </header>
+
+    <div class="card" id="settings-card">
+      <div class="card-header">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <h2>Paramètres</h2>
+      </div>
+
+      <div class="form-grid">
         <div>
           <label for="platform">Plateforme</label>
           <select id="platform">
@@ -80,209 +283,222 @@
           </select>
         </div>
         <div>
-          <label for="niche">Niche (obligatoire)</label>
-          <input id="niche" type="text" placeholder="ex : parodie musicale / montage vidéo / fitness"/>
-        </div>
-        <div>
-          <label for="theme">Thème de la vidéo (obligatoire)</label>
-          <input id="theme" type="text" placeholder="ex : parodie Obispo / perte de poids 5kg / automatiser Notion"/>
-        </div>
-      </div>
-
-      <div class="grid cols-3" style="margin-top:8px">
-        <div>
           <label for="tone">Ton</label>
           <select id="tone">
             <option value="intrigant">Intrigant</option>
-            <option value="bienveillant">Bienveillant</option>
-            <option value="cash">Cash</option>
             <option value="humour" selected>Humour</option>
+            <option value="cash">Cash</option>
+            <option value="bienveillant">Bienveillant</option>
             <option value="urgent">Urgent</option>
             <option value="educatif">Éducatif</option>
           </select>
         </div>
-        <div>
-          <label for="audience">Cible (optionnel)</label>
-          <input id="audience" type="text" placeholder="ex : débutants, freelances…"/>
-        </div>
-        <div>
-          <label for="count">Nombre</label>
-          <select id="count"><option>5</option><option>10</option><option>15</option><option>20</option><option>25</option></select>
-        </div>
-      </div>
 
-      <div style="margin-top:8px">
-        <label for="brief">Brief libre (optionnel)</label>
-        <textarea id="brief" placeholder="Contexte, contrainte de style, référence précise…"></textarea>
-      </div>
-
-      <div class="grid cols-2" style="margin-top:8px">
-        <div>
-          <label>Intensité émotionnelle</label>
-          <div class="row">
-            <span class="note">Léger</span>
-            <input id="intensity" type="range" min="1" max="3" step="1" value="2"/>
-            <span class="note">Agressif</span>
+        <div class="full-width">
+          <label for="niche">Niche (obligatoire)</label>
+          <input id="niche" type="text" placeholder="ex: montage vidéo, fitness, parodie musicale"/>
+        </div>
+        <div class="full-width">
+          <label for="theme">Thème de la vidéo (obligatoire)</label>
+          <input id="theme" type="text" placeholder="ex: perte de poids, automatiser Notion"/>
+        </div>
+        <div class="full-width">
+          <label for="brief">Brief libre (optionnel)</label>
+          <textarea id="brief" placeholder="Contexte, contrainte de style, référence..."></textarea>
+        </div>
+        
+        <div class="full-width">
+          <label>Catégories prioritaires (multi-choix)</label>
+          <div class="chip-container" id="catChips">
+            <label> <input type="checkbox" value="question"/> <span>Question</span> </label>
+            <label> <input type="checkbox" value="negatif"/> <span>Négatif</span> </label>
+            <label> <input type="checkbox" value="controverse"/> <span>Controversé</span> </label>
+            <label> <input type="checkbox" value="promesse"/> <span>Promesse</span> </label>
+            <label> <input type="checkbox" value="chiffres"/> <span>Chiffres</span> </label>
+            <label> <input type="checkbox" value="experience"/> <span>Expérience</span> </label>
+            <label> <input type="checkbox" value="surprenant"/> <span>Surprenant</span> </label>
+            <label> <input type="checkbox" value="suspense"/> <span>Suspense</span> </label>
+            <label> <input type="checkbox" value="fomo"/> <span>FOMO</span> </label>
           </div>
         </div>
-        <div>
-          <label>Catégories prioritaires (multi‑choix)</label>
-          <div class="row" id="catChips">
-            <label><input type="checkbox" value="question"/> Question</label>
-            <label><input type="checkbox" value="negatif"/> Négatif</label>
-            <label><input type="checkbox" value="controverse"/> Controversé</label>
-            <label><input type="checkbox" value="promesse"/> Promesse</label>
-            <label><input type="checkbox" value="chiffres"/> Chiffres</label>
-            <label><input type="checkbox" value="experience"/> Expérience</label>
-            <label><input type="checkbox" value="surprenant"/> Surprenant</label>
-            <label><input type="checkbox" value="suspense"/> Suspense</label>
-            <label><input type="checkbox" value="fomo"/> FOMO</label>
-          </div>
+        
+        <div class="full-width" style="margin-top: 1rem;">
+          <button id="boost" class="btn primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>
+            Générer les hooks
+          </button>
+          <div id="loader"><div class="spinner"></div></div>
         </div>
       </div>
+    </div>
 
-      <div class="grid cols-2" style="margin-top:8px">
-        <div>
-          <label for="videoLink">Lien de la vidéo (optionnel)</label>
-          <input id="videoLink" type="url" placeholder="https://..."/>
-        </div>
-        <div>
-          <label for="videoTitle">Titre / repère (optionnel)</label>
-          <input id="videoTitle" type="text" placeholder="ex : Parodie Obispo – Savoir Emmerder"/>
-        </div>
+    <div class="card" id="results-card">
+       <div class="card-header">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+        <h2>Hooks Générés</h2>
       </div>
-
-      <div class="row" style="margin-top:12px">
-        <button id="boost" class="btn">Générer (Boost AI)</button>
-        <button id="copyAll" class="btn secondary">Tout copier</button>
+      <div id="list" class="hooks-list">
+        <p class="muted">Les résultats apparaîtront ici...</p>
       </div>
-      <p class="tip">Astuce : sois précis dans “Niche” et “Thème”. Sélectionne la plateforme pour un style adapté.</p>
-    </div></div>
-
-    <div class="card"><div class="inner">
-      <h3 style="margin:0 0 6px">Hooks (avec score)</h3>
-      <div id="list" class="list"></div>
-    </div></div>
-  </section>
+    </div>
+  </div>
 
 <script>
-  // ----- Thème Auto / Clair / Sombre -----
-  const THEME_KEY='ui_theme_pref';
-  const themeSel=document.getElementById('themeSelect');
-  const mediaDark=window.matchMedia('(prefers-color-scheme: dark)');
-  function applyTheme(pref){
-    if(pref==='light'){ document.documentElement.setAttribute('data-theme','light'); return; }
-    if(pref==='dark'){  document.documentElement.setAttribute('data-theme','dark');  return; }
-    document.documentElement.setAttribute('data-theme', mediaDark.matches ? 'dark' : 'light');
-  }
-  function getPref(){ return localStorage.getItem(THEME_KEY) || 'auto'; }
-  function setPref(v){ localStorage.setItem(THEME_KEY, v); }
-  themeSel.value=getPref(); applyTheme(themeSel.value);
-  themeSel.onchange=()=>{ setPref(themeSel.value); applyTheme(themeSel.value); };
-  mediaDark.addEventListener?.('change', ()=>{ if(getPref()==='auto') applyTheme('auto'); });
-
-  // ----- App -----
   const $ = id => document.getElementById(id);
   const KEY = 'hgpp_history_v1';
 
-  function scoreHook(h, niche, theme){
-    let s=0; const words=h.trim().split(/\s+/).length;
-    if (words<=12) s+=20;
+  // --- Card glow effect ---
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    card.onmousemove = e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--x', `${x}px`);
+      card.style.setProperty('--y', `${y}px`);
+    };
+  });
+
+  function scoreHook(h) {
+    let s=50; const words=h.trim().split(/\s+/).length;
+    if (words > 4 && words <= 12) s+=25; else if (words <= 4) s+=10; else s-=15;
     if (/^\d/.test(h) || /^[A-ZÉÈÀÂÔÎÛÄËÏÖÜÇ]{2,}/.test(h)) s+=15;
     if (/[!?]/.test(h)) s+=10;
-    if (niche && h.toLowerCase().includes(niche.toLowerCase())) s+=15;
-    if (theme && h.toLowerCase().includes(theme.toLowerCase())) s+=15;
-    if (/ne scrolle pas|arrête|stop|fomo|dernier|ultime|maintenant/i.test(h)) s+=10;
-    if (/pourquoi|comment|tu savais|personne|devine/i.test(h)) s+=7;
-    if (/pas|erreur|pire|interdit|illégal/i.test(h)) s+=6;
-    if (words>12) s-=(words-12)*2;
-    return Math.max(0,Math.min(100,s));
+    if (/pourquoi|comment|secret|révélation/i.test(h)) s+=10;
+    if (/pas|erreur|pire|interdit|jamais/i.test(h)) s+=10;
+    s = Math.max(0, Math.min(100, s));
+    return s;
   }
-  function gradeFromScore(s){ if(s>=90)return"A+"; if(s>=85)return"A"; if(s>=80)return"A-"; if(s>=70)return"B"; if(s>=60)return"C"; if(s>=50)return"D"; return"F"; }
-  function barClass(s){ return s>=70?"good":(s>=40?"mid":"bad"); }
+  function gradeFromScore(s) { if(s>=90)return"A+"; if(s>=85)return"A"; if(s>=80)return"A-"; if(s>=70)return"B"; if(s>=60)return"C"; return"D"; }
 
-  function getIntensity(){ const v=$('intensity').value; return v==="1"?"leger":(v==="3"?"agressif":"normal"); }
-  function getCategories(){ return [...document.querySelectorAll('#catChips input:checked')].map(i=>i.value); }
-  function payload(){
+  function getCategories() { return [...document.querySelectorAll('#catChips input:checked')].map(i=>i.value); }
+  function payload() {
     return {
-      platform:$('platform').value, niche:$('niche').value.trim(), theme:$('theme').value.trim(),
-      tone:$('tone').value, audience:$('audience').value.trim(), brief:$('brief').value.trim(),
-      intensity:getIntensity(), priorityCategories:getCategories(),
-      count: parseInt($('count').value,10)||10
+      platform: $('platform').value, niche: $('niche').value.trim(), theme: $('theme').value.trim(),
+      tone: $('tone').value, audience: "", brief: $('brief').value.trim(),
+      intensity: "normal", priorityCategories: getCategories(),
+      count: 10
     };
   }
 
-  function loadHistory(){ try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return[];} }
-  function saveHistory(l){ try{localStorage.setItem(KEY,JSON.stringify(l));}catch{} }
-  function addHistory(e){ const l=loadHistory(); l.unshift(e); if(l.length>200) l.pop(); saveHistory(l); }
-
-  function toggleFav(saveId, hookIndex){
-    const list=loadHistory(); const it=list.find(x=>x.id===saveId); if(!it) return;
-    it.hooks[hookIndex].fav=!it.hooks[hookIndex].fav; saveHistory(list);
-    const btns=document.querySelectorAll('.hook .fav');
-    if(btns[hookIndex]) btns[hookIndex].textContent = it.hooks[hookIndex].fav ? '★ Favori':'☆ Favori';
-  }
+  function loadHistory() { try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return[];} }
+  function saveHistory(l) { try{localStorage.setItem(KEY,JSON.stringify(l));}catch{} }
+  function addHistory(e) { const l=loadHistory(); l.unshift(e); if(l.length>200) l.pop(); saveHistory(l); }
 
   function renderHooks(hooks, ctx){
-    const box=$('list'); box.innerHTML='';
-    hooks.forEach((h,idx)=>{
-      const s=scoreHook(h, ctx.niche, ctx.theme);
-      const g=gradeFromScore(s);
-      const row=document.createElement('div'); row.className='hook';
-      const top=document.createElement('div'); top.className='hook-top';
-      const text=document.createElement('span'); text.className='text'; text.textContent=h;
-      const fav=document.createElement('button'); fav.className='fav'; fav.textContent='☆ Favori';
-      fav.onclick=()=>toggleFav(ctx._saveId, idx);
-      top.appendChild(text); top.appendChild(fav);
+    const box = $('list');
+    box.innerHTML = '';
+    if (hooks.length === 0) {
+      box.innerHTML = '<p class="muted">Aucun hook n\'a été généré. Essayez d\'ajuster vos paramètres.</p>';
+      return;
+    }
 
-      const sc=document.createElement('div'); sc.className='score '+barClass(s);
-      const grade=document.createElement('div'); grade.className='grade'; grade.textContent=g;
-      const bar=document.createElement('div'); bar.className='bar';
-      const fill=document.createElement('i'); fill.style.width=s+'%'; bar.appendChild(fill);
-      const note=document.createElement('div'); note.className='note'; note.textContent=s+'/100';
-      sc.appendChild(grade); sc.appendChild(bar); sc.appendChild(note);
+    hooks.forEach(h => {
+      const s = scoreHook(h);
+      const g = gradeFromScore(s);
+      
+      const row = document.createElement('div');
+      row.className = 'hook-item';
 
-      row.appendChild(top); row.appendChild(sc);
+      const gradeEl = document.createElement('div');
+      gradeEl.className = 'grade';
+      gradeEl.textContent = g;
+
+      const textEl = document.createElement('span');
+      textEl.className = 'text';
+      textEl.textContent = h;
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+      copyBtn.title = "Copier l'accroche";
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(h).then(() => {
+          copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>`;
+          setTimeout(() => {
+            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+          }, 1500);
+        });
+      };
+      
+      row.appendChild(gradeEl);
+      row.appendChild(textEl);
+      row.appendChild(copyBtn);
       box.appendChild(row);
     });
   }
 
   function saveSession(ctx, hooks){
-    const enriched=hooks.map(t=>{ const s=scoreHook(t, ctx.niche, ctx.theme); return {text:t, score:s, grade:gradeFromScore(s), fav:false}; });
-    const id=(Date.now().toString(36)+Math.random().toString(36).slice(2,7)).toUpperCase();
+    const enriched = hooks.map(t => { 
+      const s = scoreHook(t); 
+      return {text: t, score: s, grade: gradeFromScore(s), fav: false}; 
+    });
+    const id = (Date.now().toString(36) + Math.random().toString(36).slice(2,7)).toUpperCase();
     addHistory({
-      id, ts:new Date().toISOString(),
-      platform:ctx.platform, niche:ctx.niche, theme:ctx.theme, tone:ctx.tone, audience:ctx.audience, brief:ctx.brief,
-      intensity:ctx.intensity, categories:ctx.priorityCategories, count:enriched.length,
-      video:{ title: $('videoTitle').value.trim(), link: $('videoLink').value.trim() },
+      id, ts: new Date().toISOString(),
+      ...ctx,
+      count: enriched.length,
       hooks: enriched
     });
     return id;
   }
 
-  async function generate(){
-    const p=payload();
-    if(!p.niche || !p.theme){ alert('Niche + Thème requis'); return; }
-    const r=await fetch('/api/generate-hooks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    if(!r.ok){ alert('Erreur API: '+await r.text()); return; }
-    const {hooks=[]}=await r.json();
-    const id=saveSession(p, hooks);
-    renderHooks(hooks, {...p, _saveId:id});
+  async function generate() {
+    const p = payload();
+    if(!p.niche || !p.theme){
+      alert('La Niche et le Thème sont obligatoires.');
+      return;
+    }
+    
+    const boostBtn = $('boost');
+    const loader = $('loader');
+    boostBtn.disabled = true;
+    boostBtn.style.opacity = '0.7';
+    loader.style.display = 'block';
+    $('list').innerHTML = '';
+
+    try {
+      const r = await fetch('/api/generate-hooks',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(p)
+      });
+      if(!r.ok){
+        const errText = await r.text();
+        $('list').innerHTML = `<p class="muted">Erreur de l'API : ${errText}</p>`;
+        return;
+      }
+      const { hooks = [] } = await r.json();
+      saveSession(p, hooks);
+      renderHooks(hooks, p);
+    } catch (err) {
+      $('list').innerHTML = `<p class="muted">Erreur de connexion : ${err.message}</p>`;
+    } finally {
+      boostBtn.disabled = false;
+      boostBtn.style.opacity = '1';
+      loader.style.display = 'none';
+    }
   }
 
-  document.getElementById('boost').onclick=generate;
-  document.getElementById('copyAll').onclick=async()=>{ const all=[...document.querySelectorAll('.hook .text')].map(n=>n.textContent).join('\n'); try{ await navigator.clipboard.writeText(all);}catch{} };
+  $('boost').onclick = generate;
 
-  // Autofill from history resume
-  try{
-    const resume=JSON.parse(localStorage.getItem('hgpp_resume')||'null');
+  // Autofill from history resume (if needed)
+  try {
+    const resume = JSON.parse(localStorage.getItem('hgpp_resume') || 'null');
     if(resume){
-      ['platform','niche','theme','tone','audience','brief','count'].forEach(k=>{ const el=$(k); if(el) el.value = (resume[k] ?? el.value); });
-      (resume.categories||[]).forEach(v=>{const el=document.querySelector(`#catChips input[value="${v}"]`); if(el) el.checked=true;});
-      $('intensity').value = resume.intensity==='leger'?1 : resume.intensity==='agressif'?3 : 2;
+      ['platform', 'niche', 'theme', 'tone', 'brief'].forEach(k => {
+        const el = $(k);
+        if(el && resume[k]) el.value = resume[k];
+      });
+      (resume.categories || []).forEach(v => {
+        const el = document.querySelector(`#catChips input[value="${v}"]`);
+        if(el) el.checked = true;
+      });
       localStorage.removeItem('hgpp_resume');
     }
-  }catch{}
+  } catch(e) {
+    console.error("Could not load resume data", e);
+  }
 </script>
 </body>
 </html>
