@@ -20,9 +20,7 @@
     --font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
   }
   
-  /* Reset & Base */
   * { box-sizing: border-box; }
-  
   body {
     margin: 0;
     background-color: var(--bg);
@@ -34,7 +32,6 @@
     line-height: 1.6;
   }
 
-  /* Layout */
   .main-layout {
     max-width: 1200px;
     margin: 0 auto;
@@ -43,11 +40,7 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  @media(min-width: 960px) {
-    .main-layout {
-      grid-template-columns: 420px 1fr;
-    }
-  }
+  @media(min-width: 960px) { .main-layout { grid-template-columns: 420px 1fr; } }
 
   /* Header */
   header {
@@ -55,22 +48,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
-  .history-link {
+  .history-link, .theme-select {
     color: var(--ink);
     text-decoration: none;
     border: 1px solid var(--card-border);
-    padding: 8px 16px;
+    padding: 8px 12px;
     border-radius: 999px;
     background: rgba(255,255,255,0.05);
     transition: background 0.2s, border-color 0.2s;
   }
-  .history-link:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
-  }
-  
+  .history-link:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+  label.note { font-size: 12px; color: var(--muted); margin-right: 6px; }
+
   /* Card */
   .card {
     background: var(--card-bg);
@@ -81,15 +74,9 @@
     overflow: hidden;
     backdrop-filter: blur(20px);
   }
-
-  /* Motion-aware accent glow effect */
   .card::before {
     content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+    position: absolute; inset: 0;
     background: var(--accent-glow);
     z-index: -1;
     opacity: 0;
@@ -97,166 +84,73 @@
   }
   .card:hover::before { opacity: 1; }
   
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .card-header h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  .icon {
-    width: 24px;
-    height: 24px;
-    color: var(--muted);
-  }
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .card-header h2 { font-size: 1.25rem; font-weight: 600; margin: 0; }
+  .icon { width: 24px; height: 24px; color: var(--muted); }
 
   /* Form Grid */
-  .form-grid {
-    display: grid;
-    gap: 16px;
-  }
+  .form-grid { display: grid; gap: 16px; }
   .form-grid .full-width { grid-column: 1 / -1; }
-  @media(min-width: 960px) {
-    .form-grid.cols-2 { grid-template-columns: 1fr 1fr; }
-  }
+  @media(min-width: 960px) { .form-grid.cols-2 { grid-template-columns: 1fr 1fr; } .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
 
   /* Form Elements */
-  label {
-    font-weight: 500;
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: var(--muted);
-  }
+  label { font-weight: 500; display: block; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
   input[type="text"], textarea, select {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid var(--card-border);
-    border-radius: 10px;
-    background: rgba(0,0,0,0.2);
-    color: var(--ink);
-    font-size: 15px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%; padding: 10px 14px; border: 1px solid var(--card-border); border-radius: 10px;
+    background: rgba(0,0,0,0.2); color: var(--ink); font-size: 15px; transition: border-color 0.2s, box-shadow 0.2s;
   }
   input[type="text"]:focus, textarea:focus, select:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
   }
   textarea { min-height: 80px; resize: vertical; }
+  /* Fix options */
+  option { background: #1E1E22; color: var(--ink); }
 
-  /* Category Chips */
-  .chip-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .chip-container label {
-    margin: 0;
-    cursor: pointer;
-  }
-  .chip-container input {
-    display: none;
-  }
+  /* Chips */
+  .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip-container label { margin: 0; cursor: pointer; }
+  .chip-container input { display: none; }
   .chip-container span {
-    display: block;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--card-border);
-    font-size: 13px;
-    font-weight: 500;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    display: block; padding: 6px 14px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border);
+    font-size: 13px; font-weight: 500; transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
-  .chip-container input:checked + span {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent-strong);
-  }
-  .chip-container label:hover span {
-    border-color: rgba(255,255,255,0.3);
-  }
+  .chip-container input:checked + span { background: var(--accent); color: #fff; border-color: var(--accent-strong); }
+  .chip-container label:hover span { border-color: rgba(255,255,255,0.3); }
 
   /* Buttons */
   .btn {
-    border: 0;
-    padding: 12px 20px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    border: 0; padding: 12px 20px; border-radius: 12px;
+    font-weight: 600; font-size: 15px; cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   }
   .btn:active { transform: scale(0.98); }
-
-  .btn.primary {
-    background: var(--accent);
-    color: #fff;
-  }
+  .btn.primary { background: var(--accent); color: #fff; }
   .btn.primary:hover { background: var(--accent-strong); }
-
-  .btn.secondary {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--ink);
-    border: 1px solid var(--card-border);
-  }
+  .btn.secondary { background: rgba(255, 255, 255, 0.05); color: var(--ink); border: 1px solid var(--card-border); }
   .btn.secondary:hover { background: rgba(255, 255, 255, 0.1); }
-  
-  /* Results List */
+
+  /* Results */
   .hooks-list { display: grid; gap: 12px; }
   .hook-item {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--card-border);
     border-radius: 12px;
     padding: 16px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
   }
   .hook-item .text { flex: 1; }
-  .hook-item .grade {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--accent);
-    flex-shrink: 0;
-  }
+  .hook-item .grade { font-size: 1rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
   .copy-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
-    transition: color 0.2s, background 0.2s;
-    flex-shrink: 0;
+    background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 6px;
+    transition: color 0.2s, background 0.2s; flex-shrink: 0;
   }
-  .copy-btn:hover {
-    color: var(--ink);
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
+  .copy-btn:hover { color: var(--ink); background: rgba(255, 255, 255, 0.1); }
+
   /* Loader */
   #loader { display: none; margin-top: 1rem; }
-  .spinner {
-    width: 24px;
-    height: 24px;
-    border: 3px solid var(--card-border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
-  }
+  .spinner { width: 24px; height: 24px; border: 3px solid var(--card-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
 </style>
 </head>
 <body>
@@ -264,7 +158,15 @@
   <div class="main-layout">
     <header>
       <h1>Générateur de Hooks ✨</h1>
-      <a href="history.html" class="history-link">Historique</a>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <label for="themeSelect" class="note">Thème</label>
+        <select id="themeSelect" class="theme-select">
+          <option value="auto" selected>Auto</option>
+          <option value="light">Clair</option>
+          <option value="dark">Sombre</option>
+        </select>
+        <a href="history.html" class="history-link">Historique</a>
+      </div>
     </header>
 
     <div class="card" id="settings-card">
@@ -273,7 +175,7 @@
         <h2>Paramètres</h2>
       </div>
 
-      <div class="form-grid">
+      <div class="form-grid cols-3">
         <div>
           <label for="platform">Plateforme</label>
           <select id="platform">
@@ -293,7 +195,15 @@
             <option value="educatif">Éducatif</option>
           </select>
         </div>
+        <div>
+          <label for="count">Nombre</label>
+          <select id="count">
+            <option>5</option><option selected>10</option><option>15</option><option>20</option><option>25</option>
+          </select>
+        </div>
+      </div>
 
+      <div class="form-grid">
         <div class="full-width">
           <label for="niche">Niche (obligatoire)</label>
           <input id="niche" type="text" placeholder="ex: montage vidéo, fitness, parodie musicale"/>
@@ -306,34 +216,34 @@
           <label for="brief">Brief libre (optionnel)</label>
           <textarea id="brief" placeholder="Contexte, contrainte de style, référence..."></textarea>
         </div>
-        
         <div class="full-width">
           <label>Catégories prioritaires (multi-choix)</label>
           <div class="chip-container" id="catChips">
-            <label> <input type="checkbox" value="question"/> <span>Question</span> </label>
-            <label> <input type="checkbox" value="negatif"/> <span>Négatif</span> </label>
-            <label> <input type="checkbox" value="controverse"/> <span>Controversé</span> </label>
-            <label> <input type="checkbox" value="promesse"/> <span>Promesse</span> </label>
-            <label> <input type="checkbox" value="chiffres"/> <span>Chiffres</span> </label>
-            <label> <input type="checkbox" value="experience"/> <span>Expérience</span> </label>
-            <label> <input type="checkbox" value="surprenant"/> <span>Surprenant</span> </label>
-            <label> <input type="checkbox" value="suspense"/> <span>Suspense</span> </label>
-            <label> <input type="checkbox" value="fomo"/> <span>FOMO</span> </label>
+            <label><input type="checkbox" value="question"/><span>Question</span></label>
+            <label><input type="checkbox" value="negatif"/><span>Négatif</span></label>
+            <label><input type="checkbox" value="controverse"/><span>Controversé</span></label>
+            <label><input type="checkbox" value="promesse"/><span>Promesse</span></label>
+            <label><input type="checkbox" value="chiffres"/><span>Chiffres</span></label>
+            <label><input type="checkbox" value="experience"/><span>Expérience</span></label>
+            <label><input type="checkbox" value="surprenant"/><span>Surprenant</span></label>
+            <label><input type="checkbox" value="suspense"/><span>Suspense</span></label>
+            <label><input type="checkbox" value="fomo"/><span>FOMO</span></label>
           </div>
         </div>
-        
-        <div class="full-width" style="margin-top: 1rem;">
+
+        <div class="full-width" style="margin-top: 1rem; display:flex; gap:8px; flex-wrap:wrap; align-items:center">
           <button id="boost" class="btn primary">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path><path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path></svg>
             Générer les hooks
           </button>
+          <button id="copyAll" class="btn secondary">Tout copier</button>
           <div id="loader"><div class="spinner"></div></div>
         </div>
       </div>
     </div>
 
     <div class="card" id="results-card">
-       <div class="card-header">
+      <div class="card-header">
         <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
         <h2>Hooks Générés</h2>
       </div>
@@ -347,18 +257,31 @@
   const $ = id => document.getElementById(id);
   const KEY = 'hgpp_history_v1';
 
+  // --- Thème Auto/Clair/Sombre (persisté) ---
+  const THEME_KEY='ui_theme_pref';
+  const themeSel=$('themeSelect');
+  const mediaDark=window.matchMedia?.('(prefers-color-scheme: dark)');
+  function applyTheme(pref){
+    if(pref==='light'){ document.documentElement.setAttribute('data-theme','light'); return; }
+    if(pref==='dark'){  document.documentElement.setAttribute('data-theme','dark');  return; }
+    document.documentElement.setAttribute('data-theme', mediaDark?.matches ? 'dark' : 'light');
+  }
+  function getPref(){ try{ return localStorage.getItem(THEME_KEY)||'auto'; }catch{ return 'auto'; } }
+  function setPref(v){ try{ localStorage.setItem(THEME_KEY,v);}catch{} }
+  themeSel.value=getPref(); applyTheme(themeSel.value);
+  themeSel.onchange=()=>{ setPref(themeSel.value); applyTheme(themeSel.value); };
+  mediaDark?.addEventListener?.('change', ()=>{ if(getPref()==='auto') applyTheme('auto'); });
+
   // --- Card glow effect ---
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.onmousemove = e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--x', `${x}px`);
-      card.style.setProperty('--y', `${y}px`);
+  document.querySelectorAll('.card').forEach(card=>{
+    card.onmousemove=e=>{
+      const r=card.getBoundingClientRect();
+      card.style.setProperty('--x', `${e.clientX-r.left}px`);
+      card.style.setProperty('--y', `${e.clientY-r.top}px`);
     };
   });
 
+  // --- Scoring ---
   function scoreHook(h) {
     let s=50; const words=h.trim().split(/\s+/).length;
     if (words > 4 && words <= 12) s+=25; else if (words <= 4) s+=10; else s-=15;
@@ -366,34 +289,38 @@
     if (/[!?]/.test(h)) s+=10;
     if (/pourquoi|comment|secret|révélation/i.test(h)) s+=10;
     if (/pas|erreur|pire|interdit|jamais/i.test(h)) s+=10;
-    s = Math.max(0, Math.min(100, s));
-    return s;
+    return Math.max(0, Math.min(100, s));
   }
-  function gradeFromScore(s) { if(s>=90)return"A+"; if(s>=85)return"A"; if(s>=80)return"A-"; if(s>=70)return"B"; if(s>=60)return"C"; return"D"; }
+  function gradeFromScore(s){ if(s>=90)return"A+"; if(s>=85)return"A"; if(s>=80)return"A-"; if(s>=70)return"B"; if(s>=60)return"C"; return"D"; }
 
-  function getCategories() { return [...document.querySelectorAll('#catChips input:checked')].map(i=>i.value); }
-  function payload() {
+  // --- Form helpers ---
+  function getCategories(){ return [...document.querySelectorAll('#catChips input:checked')].map(i=>i.value); }
+  function payload(){
     return {
-      platform: $('platform').value, niche: $('niche').value.trim(), theme: $('theme').value.trim(),
-      tone: $('tone').value, audience: "", brief: $('brief').value.trim(),
-      intensity: "normal", priorityCategories: getCategories(),
-      count: 10
+      platform: $('platform').value,
+      niche: $('niche').value.trim(),
+      theme: $('theme').value.trim(),
+      tone: $('tone').value,
+      audience: "",
+      brief: $('brief').value.trim(),
+      intensity: "normal",
+      priorityCategories: getCategories(),
+      count: parseInt(($('count')?.value||'10'),10) || 10
     };
   }
 
-  function loadHistory() { try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return[];} }
-  function saveHistory(l) { try{localStorage.setItem(KEY,JSON.stringify(l));}catch{} }
-  function addHistory(e) { const l=loadHistory(); l.unshift(e); if(l.length>200) l.pop(); saveHistory(l); }
+  // --- History helpers ---
+  function loadHistory(){ try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch{return[];} }
+  function saveHistory(l){ try{localStorage.setItem(KEY,JSON.stringify(l));}catch{} }
+  function addHistory(e){ const l=loadHistory(); l.unshift(e); if(l.length>200) l.pop(); saveHistory(l); }
 
-  function renderHooks(hooks, ctx){
+  // --- Render hooks ---
+  function renderHooks(hooks){
     const box = $('list');
     box.innerHTML = '';
-    if (hooks.length === 0) {
-      box.innerHTML = '<p class="muted">Aucun hook n\'a été généré. Essayez d\'ajuster vos paramètres.</p>';
-      return;
-    }
+    if (!hooks.length) { box.innerHTML = '<p class="muted">Aucun hook n\'a été généré. Ajuste tes paramètres.</p>'; return; }
 
-    hooks.forEach(h => {
+    hooks.forEach(h=>{
       const s = scoreHook(h);
       const g = gradeFromScore(s);
       
@@ -413,92 +340,6 @@
       copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
       copyBtn.title = "Copier l'accroche";
       copyBtn.onclick = () => {
-        navigator.clipboard.writeText(h).then(() => {
+        navigator.clipboard.writeText(h).then(()=>{
           copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>`;
-          setTimeout(() => {
-            copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-          }, 1500);
-        });
-      };
-      
-      row.appendChild(gradeEl);
-      row.appendChild(textEl);
-      row.appendChild(copyBtn);
-      box.appendChild(row);
-    });
-  }
-
-  function saveSession(ctx, hooks){
-    const enriched = hooks.map(t => { 
-      const s = scoreHook(t); 
-      return {text: t, score: s, grade: gradeFromScore(s), fav: false}; 
-    });
-    const id = (Date.now().toString(36) + Math.random().toString(36).slice(2,7)).toUpperCase();
-    addHistory({
-      id, ts: new Date().toISOString(),
-      ...ctx,
-      count: enriched.length,
-      hooks: enriched
-    });
-    return id;
-  }
-
-  async function generate() {
-    const p = payload();
-    if(!p.niche || !p.theme){
-      alert('La Niche et le Thème sont obligatoires.');
-      return;
-    }
-    
-    const boostBtn = $('boost');
-    const loader = $('loader');
-    boostBtn.disabled = true;
-    boostBtn.style.opacity = '0.7';
-    loader.style.display = 'block';
-    $('list').innerHTML = '';
-
-    try {
-      const r = await fetch('/api/generate-hooks',{
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(p)
-      });
-      if(!r.ok){
-        const errText = await r.text();
-        $('list').innerHTML = `<p class="muted">Erreur de l'API : ${errText}</p>`;
-        return;
-      }
-      const { hooks = [] } = await r.json();
-      saveSession(p, hooks);
-      renderHooks(hooks, p);
-    } catch (err) {
-      $('list').innerHTML = `<p class="muted">Erreur de connexion : ${err.message}</p>`;
-    } finally {
-      boostBtn.disabled = false;
-      boostBtn.style.opacity = '1';
-      loader.style.display = 'none';
-    }
-  }
-
-  $('boost').onclick = generate;
-
-  // Autofill from history resume (if needed)
-  try {
-    const resume = JSON.parse(localStorage.getItem('hgpp_resume') || 'null');
-    if(resume){
-      ['platform', 'niche', 'theme', 'tone', 'brief'].forEach(k => {
-        const el = $(k);
-        if(el && resume[k]) el.value = resume[k];
-      });
-      (resume.categories || []).forEach(v => {
-        const el = document.querySelector(`#catChips input[value="${v}"]`);
-        if(el) el.checked = true;
-      });
-      localStorage.removeItem('hgpp_resume');
-    }
-  } catch(e) {
-    console.error("Could not load resume data", e);
-  }
-</script>
-</body>
-</html>
+          setTimeout(()=>{ copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`; },
