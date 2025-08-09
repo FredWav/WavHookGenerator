@@ -16,9 +16,14 @@ export default async function handler(req) {
 
   const body = await req.json().catch(() => ({}));
   const {
-    platform = "tiktok", niche = "", theme = "", tone = "intrigant",
-    brief = "", priorityCategories = [], count = 10,
-    // --- AJOUT: Récupération du mode Putaclic ---
+    platform = "tiktok",
+    niche = "",
+    theme = "",
+    tone = "intrigant",
+    brief = "",
+    priorityCategories = [],
+    count = 10,
+    // AJOUT : mode Putaclic
     putaclic = false
   } = body;
 
@@ -35,8 +40,8 @@ export default async function handler(req) {
   const mustInclude = picked.length
     ? `Priorise et inclue des hooks appartenant aux catégories: ${picked.join(", ")}.`
     : "Varie librement les catégories en équilibrant l'ensemble.";
-    
-  // --- AJOUT: Instructions spécifiques pour le mode Putaclic ---
+
+  // AJOUT : instructions Putaclic
   const putaclicGuide = putaclic
     ? `\nMODE PUTACLIC ACTIVÉ: L'objectif est le clic à tout prix. Sois excessif, provocateur et utilise des superlatifs extrêmes (choquant, incroyable, interdit, jamais vu). Crée un sentiment d'urgence ou de scandale. Les titres doivent être irrésistibles, quitte à être à la limite de l'éthique. Exagération maximale.`
     : "";
@@ -46,7 +51,7 @@ Objectif: produire des hooks à FORTE CHARGE ÉMOTIONNELLE (impact en ≤2s).
 Sortie STRICTE: JSON { "hooks": string[] } uniquement.
 Langue: français. Longueur: ≤ 12 mots. Interdits: guillemets, hashtags, emojis, point final.
 Plateforme ciblée: ${platform} → ${platformGuide}
-${putaclicGuide}`; // Injection des instructions putaclic ici
+${putaclicGuide}`;
 
   const user = `Contexte:
 Niche: ${niche}
